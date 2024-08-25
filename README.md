@@ -1,10 +1,4 @@
-QuantumKey: Your Quantum Leap in Password Security
 
-Welcome to **QuantumKey**! This cutting-edge password generator blends modern cryptographic magic with user-friendly features to deliver passwords that are both strong and unique. Perfect for keeping your digital life under lock and key!
-
-## Recommended IDE Setup
-
-- **[VSCode](https://code.visualstudio.com/)** + **[Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)** (and disable Vetur for a smoother experience).
 
 ## TypeScript & Vue Integration
 
@@ -22,7 +16,7 @@ npm run dev
 npm run build
 ```
 
-# Install browsers (only needed the first time)
+## Install browsers (only needed the first time)
 
 npx playwright install
 
