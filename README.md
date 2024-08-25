@@ -1,4 +1,4 @@
-
+[![Netlify Status](https://api.netlify.com/api/v1/badges/9fc43160-6165-4aa5-82a7-01ec0e51a1d6/deploy-status)](https://app.netlify.com/sites/quantumkey/deploys)
 
 ## TypeScript & Vue Integration
 
