@@ -1,64 +1,47 @@
-# vue-project
+QuantumKey: Your Quantum Leap in Password Security
 
-This template should help get you started developing with Vue 3 in Vite.
+Welcome to **QuantumKey**! This cutting-edge password generator blends modern cryptographic magic with user-friendly features to deliver passwords that are both strong and unique. Perfect for keeping your digital life under lock and key!
 
 ## Recommended IDE Setup
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- **[VSCode](https://code.visualstudio.com/)** + **[Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)** (and disable Vetur for a smoother experience).
 
-## Type Support for `.vue` Imports in TS
+## TypeScript & Vue Integration
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+TypeScript needs a little extra help to understand `.vue` files. We use `vue-tsc` for type-checking and **Volar** to keep the TypeScript language service in sync with `.vue` types.
 
 ## Project Setup
 
+### Install Dependencies
+
+Start by installing the project's dependencies:
+
 ```sh
 npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
 npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
 npm run build
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+# Install browsers (only needed the first time)
 
-```sh
-npm run test:unit
-```
-
-### Run End-to-End Tests with [Playwright](https://playwright.dev)
-
-```sh
-# Install browsers for the first run
 npx playwright install
 
-# When testing on CI, must build the project first
+# Build the project (required before running tests)
+
 npm run build
 
-# Runs the end-to-end tests
+# Run all end-to-end tests
+
 npm run test:e2e
-# Runs the tests only on Chromium
+
+# Run tests on Chromium only
+
 npm run test:e2e -- --project=chromium
-# Runs the tests of a specific file
+
+# Run a specific test file
+
 npm run test:e2e -- tests/example.spec.ts
-# Runs the tests in debug mode
+
+# Run tests in debug mode
+
 npm run test:e2e -- --debug
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
