@@ -1,16 +1,12 @@
 <template>
   <div class="h-screen flex items-center justify-center bg-gray-900">
-    <div
-      class="bg-gray-800 bg-opacity-80 backdrop-blur-md border border-gray-600 rounded-lg p-8 max-w-md w-full shadow-xl"
-    >
-      <h1 class="text-3xl font-bold text-center text-white mb-6">Password Generator</h1>
+    <div class="bg-gray-800 bg-opacity-90 backdrop-blur-md border border-gray-600 rounded-lg p-10 max-w-md w-full shadow-lg">
+      <h1 class="text-4xl font-extrabold text-center text-white mb-8">Password Generator</h1>
 
-      <form @submit.prevent="generatePassword" class="space-y-6">
+      <form @submit.prevent="generatePassword" class="space-y-8">
         <!-- Length Input -->
         <div>
-          <label for="length" class="block text-sm font-medium text-gray-300"
-            >Password Length</label
-          >
+          <label for="length" class="block text-lg font-bold text-gray-300 mb-2">Password Length</label>
           <input
             type="number"
             id="length"
@@ -18,16 +14,16 @@
             min="8"
             max="64"
             aria-describedby="length-helper"
-            class="mt-2 block w-full px-4 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            class="w-full px-4 py-3 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-base"
           />
-          <p id="length-helper" class="mt-1 text-gray-400 text-xs">
+          <p id="length-helper" class="mt-1 text-gray-400 text-sm">
             Specify the length of the password (between 8 and 64 characters).
           </p>
         </div>
 
         <!-- Character Types -->
         <div>
-          <label class="block text-sm font-medium text-gray-300 mb-3">Character Types</label>
+          <label class="block text-lg font-bold text-gray-300 mb-3">Character Types</label>
           <div class="grid grid-cols-2 gap-4">
             <label class="flex items-center text-gray-300">
               <input
@@ -36,7 +32,7 @@
                 class="mr-2"
                 aria-label="Include uppercase letters"
               />
-              Uppercase
+              <span class="text-sm font-medium">Uppercase</span>
             </label>
             <label class="flex items-center text-gray-300">
               <input
@@ -45,7 +41,7 @@
                 class="mr-2"
                 aria-label="Include lowercase letters"
               />
-              Lowercase
+              <span class="text-sm font-medium">Lowercase</span>
             </label>
             <label class="flex items-center text-gray-300">
               <input
@@ -54,7 +50,7 @@
                 class="mr-2"
                 aria-label="Include numbers"
               />
-              Numbers
+              <span class="text-sm font-medium">Numbers</span>
             </label>
             <label class="flex items-center text-gray-300">
               <input
@@ -63,22 +59,22 @@
                 class="mr-2"
                 aria-label="Include special characters"
               />
-              Special Characters
+              <span class="text-sm font-medium">Special Characters</span>
             </label>
           </div>
         </div>
 
         <!-- Generated Password -->
         <div>
-          <label class="block text-sm font-medium text-gray-300">Generated Password</label>
+          <label class="block text-lg font-bold text-gray-300 mb-2">Generated Password</label>
           <input
             type="text"
             :value="generatedPassword"
             readonly
             aria-describedby="password-helper"
-            class="mt-2 block w-full px-4 py-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-white focus:outline-none"
+            class="w-full px-4 py-3 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-white focus:outline-none"
           />
-          <p id="password-helper" class="mt-1 text-gray-400 text-xs">
+          <p id="password-helper" class="mt-1 text-gray-400 text-sm">
             The generated password will appear here.
           </p>
         </div>
@@ -88,7 +84,7 @@
           <button
             type="button"
             @click="copyToClipboard"
-            class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-transform transform hover:scale-105"
+            class="bg-blue-600 text-white py-3 px-5 rounded-md hover:bg-blue-700 transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500"
             aria-label="Copy password to clipboard"
           >
             Copy
@@ -96,7 +92,7 @@
           <button
             type="button"
             @click="generatePassword"
-            class="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-transform transform hover:scale-105"
+            class="bg-green-600 text-white py-3 px-5 rounded-md hover:bg-green-700 transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500"
             aria-label="Regenerate password"
           >
             Regenerate
@@ -105,7 +101,7 @@
       </form>
 
       <!-- Strength Indicator -->
-      <div v-if="generatedPassword" class="mt-4 text-center">
+      <div v-if="generatedPassword" class="mt-6 text-center">
         <div :class="strengthClass" class="text-lg font-semibold">{{ strengthText }}</div>
       </div>
     </div>
@@ -114,6 +110,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
+import axios from 'axios'
 
 // Reactive state
 const length = ref(12)
@@ -150,14 +147,17 @@ const generatePassword = () => {
 }
 
 // Update strength indicator
-const updateStrength = () => {
+const updateStrength = async () => {
   const password = generatedPassword.value
+
   let strength = 'Weak'
   let className = 'text-red-500'
+  let message = 'It’s like a weak password that even a toddler can crack.'
 
   if (password.length >= 12) {
     strength = 'Medium'
     className = 'text-yellow-500'
+    message = 'Getting better! Even a curious teenager might struggle a bit.'
   }
 
   if (
@@ -169,9 +169,20 @@ const updateStrength = () => {
   ) {
     strength = 'Strong'
     className = 'text-green-500'
+    message = 'Bravo! This password would take a supercomputer millions of years to crack.'
   }
 
-  strengthText.value = `Strength: ${strength}`
+  // Call external API for real-world strength assessment
+  try {
+    const response = await axios.post('https://api.example.com/password-strength', { password })
+    const data = response.data
+    message = data.message || message
+    className = data.class || className
+  } catch (error) {
+    console.error('Failed to fetch password strength from external API:', error)
+  }
+
+  strengthText.value = `Strength: ${strength} - ${message}`
   strengthClass.value = className
 }
 
