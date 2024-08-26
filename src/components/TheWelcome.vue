@@ -1,13 +1,13 @@
 <template>
-  <div class="h-screen flex items-center justify-center bg-gray-900">
+  <div class="flex items-center justify-center bg-gray-900 min-h-screen p-4 sm:p-6 md:p-10">
     <div
-      class="bg-gray-800 bg-opacity-90 backdrop-blur-md border border-gray-600 rounded-lg p-10 max-w-3xl w-full shadow-lg"
+      class="bg-gray-800 bg-opacity-90 backdrop-blur-md border border-gray-600 rounded-lg p-6 sm:p-8 md:p-10 max-w-xl w-full shadow-lg"
     >
-      <h1 class="text-3xl font-extrabold text-center text-white mb-8">
+      <h1 class="text-3xl font-extrabold text-center text-white mb-6 md:mb-8">
         QuantumKey Password Generator
       </h1>
 
-      <form @submit.prevent="generatePassword" class="space-y-8">
+      <form @submit.prevent="generatePassword" class="space-y-6">
         <!-- Length Slider -->
         <div>
           <label for="length" class="block text-lg font-bold text-gray-300 mb-2"
@@ -21,7 +21,7 @@
             max="64"
             step="1"
             aria-describedby="length-helper"
-            class="w-full h-2 bg-gray-700 border border-gray-600 rounded-md cursor-pointer"
+            class="w-full h-2 bg-gray-700 rounded-md cursor-pointer appearance-none"
           />
           <p id="length-helper" class="mt-1 text-gray-400 text-sm">
             Specify the length of the password (between 8 and 64 characters).
@@ -92,7 +92,7 @@
           <button
             type="button"
             @click="copyToClipboard"
-            class="bg-blue-600 text-white py-3 px-5 rounded-md hover:bg-blue-700 transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500"
             aria-label="Copy password to clipboard"
           >
             Copy
@@ -100,7 +100,7 @@
           <button
             type="button"
             @click="generatePassword"
-            class="bg-green-600 text-white py-3 px-5 rounded-md hover:bg-green-700 transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500"
+            class="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500"
             aria-label="Regenerate password"
           >
             Regenerate
@@ -109,7 +109,7 @@
       </form>
 
       <!-- Strength Indicator -->
-      <div v-if="generatedPassword" class="mt-6 text-center">
+      <div v-if="generatedPassword" class="mt-4 text-center">
         <div :class="strengthClass" class="text-lg font-semibold">{{ strengthText }}</div>
       </div>
     </div>
@@ -207,63 +207,33 @@ const copyToClipboard = () => {
 </script>
 
 <style scoped>
-/* Ensure backdrop-filter is supported by the browser */
-@supports (backdrop-filter: blur(10px)) {
-  .backdrop-blur-md {
-    backdrop-filter: blur(8px);
-  }
-}
-
-/* Style the range input */
+/* Style the range input with Tailwind CSS utilities */
 input[type='range'] {
-  -webkit-appearance: none;
-  appearance: none;
+  @apply w-full h-2 bg-gray-700 rounded-md cursor-pointer;
 }
 
 input[type='range']::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: #4f46e5;
-  cursor: pointer;
-}
-
-input[type='range']::-webkit-slider-runnable-track {
-  width: 100%;
-  height: 4px;
-  background: #6b7280;
-  border-radius: 2px;
+  @apply w-6 h-6 bg-indigo-600 rounded-full cursor-pointer;
 }
 
 input[type='range']::-moz-range-thumb {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: #4f46e5;
-  cursor: pointer;
-}
-
-input[type='range']::-moz-range-track {
-  width: 100%;
-  height: 4px;
-  background: #6b7280;
-  border-radius: 2px;
+  @apply w-6 h-6 bg-indigo-600 rounded-full cursor-pointer;
 }
 
 input[type='range']::-ms-thumb {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: #4f46e5;
-  cursor: pointer;
+  @apply w-6 h-6 bg-indigo-600 rounded-full cursor-pointer;
+}
+
+input[type='range']::-webkit-slider-runnable-track {
+  @apply w-full h-2 bg-gray-700;
+}
+
+input[type='range']::-moz-range-track {
+  @apply w-full h-2 bg-gray-700;
 }
 
 input[type='range']::-ms-track {
-  width: 100%;
-  height: 4px;
-  background: transparent;
+  @apply w-full h-2 bg-gray-700;
   border-color: transparent;
   color: transparent;
 }
