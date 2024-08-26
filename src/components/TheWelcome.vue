@@ -1,20 +1,27 @@
 <template>
   <div class="h-screen flex items-center justify-center bg-gray-900">
-    <div class="bg-gray-800 bg-opacity-90 backdrop-blur-md border border-gray-600 rounded-lg p-10 max-w-md w-full shadow-lg">
-      <h1 class="text-4xl font-extrabold text-center text-white mb-8">Password Generator</h1>
+    <div
+      class="bg-gray-800 bg-opacity-90 backdrop-blur-md border border-gray-600 rounded-lg p-10 max-w-3xl w-full shadow-lg"
+    >
+      <h1 class="text-3xl font-extrabold text-center text-white mb-8">
+        QuantumKey Password Generator
+      </h1>
 
       <form @submit.prevent="generatePassword" class="space-y-8">
-        <!-- Length Input -->
+        <!-- Length Slider -->
         <div>
-          <label for="length" class="block text-lg font-bold text-gray-300 mb-2">Password Length</label>
+          <label for="length" class="block text-lg font-bold text-gray-300 mb-2"
+            >Password Length: {{ length }}</label
+          >
           <input
-            type="number"
+            type="range"
             id="length"
-            v-model.number="length"
+            v-model="length"
             min="8"
             max="64"
+            step="1"
             aria-describedby="length-helper"
-            class="w-full px-4 py-3 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-base"
+            class="w-full h-2 bg-gray-700 border border-gray-600 rounded-md cursor-pointer"
           />
           <p id="length-helper" class="mt-1 text-gray-400 text-sm">
             Specify the length of the password (between 8 and 64 characters).
@@ -23,50 +30,51 @@
 
         <!-- Character Types -->
         <div>
-          <label class="block text-lg font-bold text-gray-300 mb-3">Character Types</label>
+          <label class="block text-lg font-bold text-gray-300 mb-3">Character Types:</label>
           <div class="grid grid-cols-2 gap-4">
-            <label class="flex items-center text-gray-300">
+            <label class="flex items-center text-gray-400">
               <input
                 type="checkbox"
                 v-model="includeUppercase"
                 class="mr-2"
                 aria-label="Include uppercase letters"
               />
-              <span class="text-sm font-medium">Uppercase</span>
+              <span class="text-sm font-light">Uppercase</span>
             </label>
-            <label class="flex items-center text-gray-300">
+            <label class="flex items-center text-gray-400">
               <input
                 type="checkbox"
                 v-model="includeLowercase"
                 class="mr-2"
                 aria-label="Include lowercase letters"
               />
-              <span class="text-sm font-medium">Lowercase</span>
+              <span class="text-sm font-light">Lowercase</span>
             </label>
-            <label class="flex items-center text-gray-300">
+            <label class="flex items-center text-gray-400">
               <input
                 type="checkbox"
                 v-model="includeNumbers"
                 class="mr-2"
                 aria-label="Include numbers"
               />
-              <span class="text-sm font-medium">Numbers</span>
+              <span class="text-sm font-light">Numbers</span>
             </label>
-            <label class="flex items-center text-gray-300">
+            <label class="flex items-center text-gray-400">
               <input
                 type="checkbox"
                 v-model="includeSpecialChars"
                 class="mr-2"
                 aria-label="Include special characters"
               />
-              <span class="text-sm font-medium">Special Characters</span>
+              <span class="text-sm font-light">Special Characters</span>
             </label>
           </div>
+          <p v-if="errorMessage" class="mt-2 text-red-500 text-sm">{{ errorMessage }}</p>
         </div>
 
         <!-- Generated Password -->
         <div>
-          <label class="block text-lg font-bold text-gray-300 mb-2">Generated Password</label>
+          <label class="block text-lg font-bold text-gray-300 mb-2">Generated Password:</label>
           <input
             type="text"
             :value="generatedPassword"
@@ -121,6 +129,7 @@ const includeSpecialChars = ref(true)
 const generatedPassword = ref('')
 const strengthText = ref('')
 const strengthClass = ref('')
+const errorMessage = ref('')
 
 // Password generation logic
 const generatePassword = () => {
@@ -137,7 +146,12 @@ const generatePassword = () => {
   if (includeNumbers.value) charset += charSets.numbers
   if (includeSpecialChars.value) charset += charSets.special
 
-  if (charset.length === 0) return
+  if (charset.length === 0) {
+    errorMessage.value = 'Please select at least one character type for the password.'
+    return
+  } else {
+    errorMessage.value = ''
+  }
 
   generatedPassword.value = Array.from({ length: length.value }, () =>
     charset.charAt(Math.floor(Math.random() * charset.length))
@@ -152,12 +166,10 @@ const updateStrength = async () => {
 
   let strength = 'Weak'
   let className = 'text-red-500'
-  let message = 'It’s like a weak password that even a toddler can crack.'
 
   if (password.length >= 12) {
     strength = 'Medium'
     className = 'text-yellow-500'
-    message = 'Getting better! Even a curious teenager might struggle a bit.'
   }
 
   if (
@@ -169,20 +181,19 @@ const updateStrength = async () => {
   ) {
     strength = 'Strong'
     className = 'text-green-500'
-    message = 'Bravo! This password would take a supercomputer millions of years to crack.'
   }
 
   // Call external API for real-world strength assessment
   try {
     const response = await axios.post('https://api.example.com/password-strength', { password })
     const data = response.data
-    message = data.message || message
+    strengthText.value = `Strength: ${strength} - ${data.message || ''}`
     className = data.class || className
   } catch (error) {
     console.error('Failed to fetch password strength from external API:', error)
+    strengthText.value = `Strength: ${strength}`
   }
 
-  strengthText.value = `Strength: ${strength} - ${message}`
   strengthClass.value = className
 }
 
@@ -201,5 +212,59 @@ const copyToClipboard = () => {
   .backdrop-blur-md {
     backdrop-filter: blur(8px);
   }
+}
+
+/* Style the range input */
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #4f46e5;
+  cursor: pointer;
+}
+
+input[type='range']::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  background: #6b7280;
+  border-radius: 2px;
+}
+
+input[type='range']::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #4f46e5;
+  cursor: pointer;
+}
+
+input[type='range']::-moz-range-track {
+  width: 100%;
+  height: 4px;
+  background: #6b7280;
+  border-radius: 2px;
+}
+
+input[type='range']::-ms-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #4f46e5;
+  cursor: pointer;
+}
+
+input[type='range']::-ms-track {
+  width: 100%;
+  height: 4px;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
 }
 </style>
